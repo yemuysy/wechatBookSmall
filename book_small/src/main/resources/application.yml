@@ -1,0 +1,111 @@
+server:
+    port: 9090
+
+spring:
+  #datasource配置
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/booksmall?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true
+    username: root
+    password: root
+    #mysql新版驱动
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+    #连接池配置
+    druid:
+      #初始化大小、最小空闲、最大激活
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      #配置获取连接等待超时的时间
+      max-wait: 60000
+      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      time-between-eviction-runs-millis: 60000
+      # 配置一个连接在池中最小生存的时间，单位是毫秒
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 1 FROM DUAL
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      # 打开PSCache，并且指定每个连接上PSCache的大小
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+      filters: stat,wall,log4j
+      # 合并多个DruidDataSource的监控数据
+      use-global-data-source-stat: true
+      # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+
+      #redis 配置
+  redis:
+    database: 0
+    host: 192.168.106.157
+    port: 6379
+    password:
+    jedis:
+      pool:
+        # 连接池最大连接数（使用负值表示没有限制）
+        max-active: 8
+        # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-wait: -1
+        #连接池中的最大空闲链接
+        max-idle: 5
+        #连接池中的最小空闲链接
+        min-idle: 0
+    timeout: 10000
+
+  # 设置上传文件大小
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 100MB
+
+
+#mybatis相关配置
+mybatis:
+  #当mybatis的xml文件和mapper接口不在相同包下时
+  #需要用mapperLocations属性指定xml文件的路径。
+  #*是个通配符，代表所有的文件，**代表所有目录下
+  mapper-locations: classpath:mapper/*.xml
+  #指定bean所在包
+  #在mapper.xml中可以使用别名而不使用类的全路径名
+  type-aliases-package: cn.zxhysy.booksmall.entry
+  #配置
+  configuration:
+    #驼峰
+    map-underscore-to-camel-case: true
+    # 配置控制台打印sql
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#pagehelper分页插件
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  params: count=countSql
+  support-methods-arguments: true
+# 通用Mapper
+mapper:
+
+  identity: MYSQL
+  # 这里指向基类
+  mappers: cn.zxhysy.booksmall.utils.mapper.MyMapper
+  # 设置 insert 和 update 中，是否判断字符串类型!=''
+  not-empty: false
+  # 枚举按简单类型处理
+  enum-as-simple-type: true
+#fastdfs 图片上传
+#http://39.108.13.196:88/zxh/M00/00/00/rBIQClyQ7cOANZ11AAC517l7vus265_big.jpg
+#192.168.106.157:22122
+fdfs:
+  so-timeout: 1501
+  connect-timeout: 2000
+  thumb-image: #缩略图生成参数
+    height: 80
+    width: 80
+  tracker-list:
+    - 39.108.13.196:22122
+#小程序相关配置
+wx:
+  appid: "wx850124bf2a081fb0"
+  secret: "aa908a2b9b7b2f25700e0e4352e620bb"
+  grant_type: "authorization_code"
+  url: "https://api.weixin.qq.com/sns/jscode2session"

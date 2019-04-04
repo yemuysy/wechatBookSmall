@@ -1,0 +1,28 @@
+<view class='container'>
+  <button class='btn-info' disabled="{{ disabled }}" open-type='getUserInfo' bindgetuserinfo='doLogin' hover-class="none">
+    <view class="profile-info">
+      <image class="avatar" src="{{userInfo.avatarUrl}}"></image>
+      <view class="info">
+        <text class="name">{{userInfo.nickName}}</text>
+      </view>
+    </view>
+  </button>
+  <view class='separate'></view>
+  <view class='user_row' bindtap='goInfo'>
+    <view class='user_row_left'>个人信息</view>
+    <image class='user_row_right' src='/static/images/goright.png'></image>
+  </view>
+  <view class='separate'></view>
+  <view class='user_row' bindtap='goOrder'>
+    <view class='user_row_left'>我的订单</view>
+    <image class='user_row_right' src='/static/images/goright.png'></image>
+  </view>
+  <view class='separate'></view>
+  <view class='user_row' bindtap='goAddress'>
+    <view class='user_row_left'>收货物地址</view>
+    <image class='user_row_right' src='/static/images/goright.png'></image>
+  </view>
+  <!-- <view class='separate'></view>
+  <!--wx:if="{{hasLogin}}" -->
+  <!--<view class="logout" bindtap="exitLogin">退出登录</view> -->
+</view>

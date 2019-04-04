@@ -1,0 +1,53 @@
+<!--pages/pay/pay.wxml-->
+<view class='container'>
+  <view class='address'>
+    <view class='item'>
+      <text style='color:red;'>*</text>
+      <label for='nickName'>收货人： </label>
+      <input id="nickName" value='{{orderMaster.userName}}' disabled='{{true}}'></input>
+    </view>
+    <view class='item'>
+      <text style='color:red;'>*</text>
+      <label for='phone'>收货手机：</label>
+      <input id="phone" value='{{orderMaster.userPhone}}' disabled='{{true}}'></input>
+    </view>
+    <view class='item'>
+      <text style='color:red;'>*</text>
+      <label for='address'>收货地址：</label>
+      <input id='address' value='{{orderMaster.userAddress}}' disabled='{{true}}'></input>
+    </view>
+  </view>
+  <view class='title'>购物清单:</view>
+  <!-- <view class='separate'></view> -->
+  <view class='goods-list'>
+    <!-- wx:for 渲染购物车列表 -->
+    <block wx:for="{{orderDetailList}}" wx:key="{{index}}">
+      <view class='goods'>
+        <!-- 点击商品图片可跳转到商品详情 -->
+        <view class='goods-img'>
+          <image src="{{imgUrl}}{{item.bookIcon}}"></image>
+        </view>
+        <view class='infoBox'>
+          <view class='info'>
+            <view>{{item.bookName}}</view>
+            <view style='color: red'>￥{{item.bookPrice}}</view>
+          </view>
+          <view class='buyMunber'>x{{item.bookQuantity}}</view>
+        </view>
+      </view>
+      <view class='separate'></view>
+    </block>
+  </view>
+  <!-- 底部操作栏 -->
+  <view class="cart-bottom">
+    <view class='cart-pay'>
+      <view class='cart_pay'>{{orderMaster.payStatus === 1 ? '已付款': orderMaster.payStatus === 0 ? '待付款': '已取消'}}</view>
+    </view>
+    <view class='cart-sum'>
+      <text class='cart_sum'>
+          <text class='sum_text'>合计：</text>
+      <text class='sum_color'>￥{{orderMaster.amount}}元</text>
+      </text>
+    </view>
+  </view>
+</view>

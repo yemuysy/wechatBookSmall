@@ -1,0 +1,34 @@
+<!--pages/myOrder/orderList.wxml-->
+<view class="container">
+  <view class="swiper-tab">
+    <block wx:for="{{swipertab}}" wx:key="{{index}}">
+      <view class="swiper-tab-list {{currtab == item.index ? 'on' : ''}}" data-current="{{item.index}}" bindtap="tabSwitch">{{item.name}}</view>
+    </block>
+  </view>
+  <view class="list-group">
+    <block wx:for="{{orderVOList}}" wx:key="{{index}}">
+      <view class="order">
+        <view class='orderHeader' bindtap='toDetail' data-index="{{index}}">
+          <text class='orderNo'>{{item.orderMaster.id}} >>> </text>
+          <text class='orderCreate'>{{item.orderMaster.createTime}}</text>
+        </view>
+        <view class='imgbox'>
+          <block wx:for="{{item.orderMaster.imgs}}" wx:for-item="img" wx:key="{{index}}">
+            <image class='img' src="{{imgUrl}}{{img}}"></image>
+          </block>
+        </view>
+        <view class='orderFoot'>
+          <view>
+            收件人:
+            <text>{{item.orderMaster.userName}}</text>
+          </view>
+          <view>
+            状态:
+            <text style='color:green'>{{item.orderMaster.payStatus === 1 ? '已付款': item.orderMaster.payStatus === 0 ? '待付款': '已取消' }}</text>
+          </view>
+        </view>
+      </view>
+    </block>
+  </view>
+  <view hidden="{{pages == pageNumber}}" class="no-more-goods">没有更多啦</view>
+</view>

@@ -1,0 +1,47 @@
+{
+  "pages": [
+    "pages/main/main",
+    "pages/order/order",
+    "pages/personal/personal",
+    "pages/cart/cart",
+    "pages/personal/userInfo/userInfo",
+    "pages/main/goods/goods",
+    "pages/pay/pay",
+    "pages/orderDetail/orderDetail"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "校园书店",
+    "backgroundColor": "#eeeeee",
+    "backgroundTextStyle": "light",
+    "enablePullDownRefresh": false
+  },
+  "tabBar": {
+    "backgroundColor": "#fafafa",
+    "borderStyle": "white",
+    "selectedColor": "#AB956D",
+    "color": "#666",
+    "list": [
+      {
+        "pagePath": "pages/main/main",
+        "iconPath": "static/images/home.png",
+        "selectedIconPath": "static/images/home@selected.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/cart/cart",
+        "iconPath": "static/images/cart.png",
+        "selectedIconPath": "static/images/cart@selected.png",
+        "text": "购物车"
+      },
+      {
+        "pagePath": "pages/personal/personal",
+        "iconPath": "static/images/my.png",
+        "selectedIconPath": "static/images/my@selected.png",
+        "text": "个人"
+      }
+    ]
+  },
+  "debug": true
+}

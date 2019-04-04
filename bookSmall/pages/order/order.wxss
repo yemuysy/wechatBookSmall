@@ -1,0 +1,98 @@
+/* pages/myOrder/orderList.wxss */
+
+page {
+  height: 100%;
+}
+
+.container {
+  background-color: #f2f2f2;
+  width: 100%;
+  height: auto;
+  min-height: 100%;
+  overflow: hidden;
+}
+
+.swiper-tab {
+  height: 40px;
+  line-height: 40px;
+  display: flex;
+  position: relative;
+  z-index: 2;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  background: white;
+  width: 100%;
+}
+
+.swiper-tab-list {
+  margin: 0 30px;
+  padding: 0 4px;
+  font-size: 15px;
+}
+
+.on {
+  border-bottom: 2px solid #4d90fe;
+  color: black;
+}
+
+.list-group {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding-bottom: 20rpx;
+}
+
+.order {
+  margin-bottom: 20rpx;
+  background: white;
+  display: flex;
+  flex-direction: column;
+}
+
+.orderHeader {
+  display: flex;
+  border-bottom: 2px solid #f2f2f2;
+  line-height: 50rpx;
+  justify-content: space-around;
+}
+
+.orderCreate {
+  font-size: 28rpx;
+}
+
+.orderNo {
+  font-size: 28rpx;
+}
+
+.imgbox {
+  display: flex;
+  flex-wrap: nowrap;
+  width: 100%;
+  padding-left: 70rpx;
+  border-bottom: 2px solid #f2f2f2;
+}
+
+.img {
+  background-color: white;
+  width: 150rpx;
+  height: 150rpx;
+  padding: 15rpx;
+}
+
+.orderFoot {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-left: 65rpx;
+  padding-right: 40rpx;
+}
+
+/**没有物品 */
+
+.no-more-goods {
+  text-align: center;
+  font-size: 24rpx;
+  padding-bottom: 48rpx;
+  color: #999;
+}

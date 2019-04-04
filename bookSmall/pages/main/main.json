@@ -1,0 +1,6 @@
+{
+  "backgroundColor": "#f4f4f4",
+  "navigationBarTitleText": "校园书店",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark"
+}

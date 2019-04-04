@@ -1,0 +1,41 @@
+<view class="container">
+  <!--搜索框-->
+  <view class="search-view" style="background:{{ scrollTop === 0 ?'-webkit-linear-gradient(top, rgba(255,255,255, 1), rgba(255,255,255, 1))' :( scrollTop<200 ? 'rgba(255,255,255,'+(scrollTop/400+1) +')' : 'rgba(255,255,255,1)')  }} ">
+    <view class="search-content">
+      <image src="../../static/images/search-pic.png" class="search-icon" />
+      <input placeholder="请输入书本名称" class="search-input" maxlength="30" confirm-type="搜索" bindinput='listenerSearchInput'>
+      </input>
+      <button class='search-btn' bindtap="toSearch">搜索
+      </button>
+    </view>
+  </view>
+  <!--导航栏-->
+  <view class="type-container">
+    <scroll-view class="type-navbar" scroll-x="true">
+      <block wx:for-items="{{categories}}" wx:key="id">
+        <view class="type-box">
+          <view id="{{item.id}}" class="type-navbar-item {{activeCategoryId == item.id ? 'type-item-on' : ''}}" bindtap="tabClick">
+            {{item.name}}
+          </view>
+        </view>
+      </block>
+    </scroll-view>
+  </view>
+  <!--商品展示-->
+  <view class="goods-container">
+    <block wx:for-items="{{books}}" wx:key="{{index}}">
+      <view class="goods-box" bindtap="toDetailsTap" data-item="{{item}}">
+        <view class="img-box">
+          <image src="{{imgUrl}}{{item.icon}}" class="image" mode="aspectFill" lazy-load="true" />
+        </view>
+        <view class="goods-title">{{item.name}}</view>
+        <view style='display:flex'>
+          <view class='goods-author'>{{item.author}}</view>
+          <view class="goods-price">¥ {{item.price}}</view>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <view hidden="{{hasNextPage}}" class="no-more-goods">没有更多啦</view>
+</view>

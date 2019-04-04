@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.zxhysy.booksmall.mapper.BookMapper">
+  <resultMap id="BaseResultMap" type="cn.zxhysy.booksmall.pojo.Book">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="author" jdbcType="VARCHAR" property="author" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="icon" jdbcType="VARCHAR" property="icon" />
+    <result column="stock" jdbcType="INTEGER" property="stock" />
+    <result column="category_id" jdbcType="INTEGER" property="categoryId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="description" jdbcType="LONGVARCHAR" property="description" />
+    <result column="pic" jdbcType="LONGVARCHAR" property="pic" />
+  </resultMap>
+
+</mapper>

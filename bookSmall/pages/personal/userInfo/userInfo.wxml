@@ -1,0 +1,24 @@
+<view class='content'>
+  <view class='top'>
+    <!-- <image class='avatar' src="{{userInfo.avatarUrl}}" bindtap="changeFace"></image> -->
+    <image class='avatar' src="{{userInfo.avatarUrl}}" bindtap="changeFace"></image>
+    <text>点击更换图像</text>
+  </view>
+
+  <form bindsubmit="saveUser">
+    <view class='item'>
+      <label for='nickName'>昵称：</label>
+      <input type='text' id="nickName" name="nickName" disabled='{{disabled}}' value='{{userInfo.nickName}}' auto-focus></input>
+    </view>
+    <view class='item'>
+      <label for='phone'>手机：</label>
+      <input type='number' id='phone' name="phone" disabled='{{disabled}}' value='{{userInfo.phone}}'></input>
+    </view>
+    <view class='item'>
+      <label for='address'>常用地址：</label>
+      <input type='text' id='address' name="address" disabled='{{disabled}}' value='{{userInfo.address}}'></input>
+    </view>
+    <button hidden='{{!hidden}}' bindtap='editUser'>编辑</button>
+    <button hidden='{{hidden}}' type='primary' form-type="submit">完成</button>
+  </form>
+</view>

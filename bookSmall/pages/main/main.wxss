@@ -1,0 +1,173 @@
+/* pages/main/main.wxss */
+
+.container {
+  background-color: rgb(255, 255, 255);
+  min-height: 100%;
+}
+
+/**
+  查询样式
+*/
+
+.search-view {
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 500;
+  width: 100%;
+  height: 100rpx;
+  background: gray;
+  display: flex;
+  flex-direction: column;
+}
+
+.search-content {
+  background: #f1f1f1;
+  width: 650rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding-top: auto;
+  padding-left: 20rpx;
+  padding-bottom: auto;
+  margin: auto;
+  height: 70rpx;
+  border-radius: 5px 5px;
+}
+
+.search-icon {
+  width: 40rpx;
+  height: 40rpx;
+  margin-right: 20rpx;
+}
+
+.search-input {
+  width: 500rpx;
+  font-size: 28rpx;
+}
+
+.search-btn {
+  width: 150rpx;
+  height: 70rpx;
+  margin-right: 0rpx;
+  background-color: #4d90fe;
+  font-size: 28rpx;
+  align-items: center;
+  border-top-left-radius: 0rpx;
+  border-bottom-left-radius: 0rpx;
+  color: #fff;
+  border: none;
+  position: relative;
+}
+
+/**导航栏样式*/
+
+.type-container {
+  width: 94.2%;
+  height: 88rpx;
+  background-color: #fff;
+  overflow: hidden;
+}
+
+.type-navbar {
+  white-space: nowrap;
+  height: 88rpx;
+  width: 100%;
+  background-color: #fff;
+}
+
+.type-box {
+  width: 160rpx;
+  box-sizing: content-box;
+  font-size: 24rpx;
+  line-height: 84rpx;
+  text-align: center;
+  display: inline-block;
+  overflow: hidden;
+}
+
+.type-navbar-item {
+  border-bottom: 4rpx solid #fff;
+  position: relative;
+  line-height: 84rpx;
+  text-align: center;
+  display: inline-block;
+  overflow: hidden;
+}
+
+.type-item-on {
+  border-bottom: 4rpx solid #49d;
+}
+
+/** 物品样式 */
+
+.goods-container {
+  display: flex;
+  /* justify-content: space-between; */
+  flex-wrap: wrap;
+  box-sizing: content-box;
+  padding: 24rpx;
+}
+
+.goods-box {
+  width: 300rpx;
+  height: 472rpx;
+  background-color: #fff;
+  overflow: hidden;
+  margin-left: 20rpx;
+  margin-right: 28rpx;
+  margin-bottom: 18rpx;
+}
+
+.goods-box .img-box {
+  width: 300rpx;
+  height: 300rpx;
+  overflow: hidden;
+}
+
+.goods-box .img-box image {
+  width: 300rpx;
+  height: 300rpx;
+}
+
+.goods-box .goods-title {
+  width: 280rpx;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  /* background-color: green; */
+  font-size: 30rpx;
+  /* padding-left: 24rpx; */
+  color: #000;
+  margin-left: 24rpx;
+}
+
+.goods-box .goods-author {
+  width: 180rpx;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  /* background-color: green; */
+  font-size: 26rpx;
+  margin-top: 20rpx;
+  color: #999;
+  margin-left: 24rpx;
+}
+
+.goods-box .goods-price {
+  width: 100rpx;
+  overflow: hidden;
+  font-size: 24rpx;
+  padding: 24rpx 0;
+  color: #f60;
+  margin-left: 24rpx;
+}
+
+/**没有物品 */
+
+.no-more-goods {
+  text-align: center;
+  font-size: 24rpx;
+  padding-bottom: 48rpx;
+  color: #999;
+}
