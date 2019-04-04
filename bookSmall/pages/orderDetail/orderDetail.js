@@ -1,4 +1,4 @@
-// pages/pay/pay.js
+// pages/pay/pay.js sh
 var app = getApp()
 Page({
 

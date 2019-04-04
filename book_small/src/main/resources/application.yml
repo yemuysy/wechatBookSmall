@@ -94,7 +94,7 @@ mapper:
   enum-as-simple-type: true
 #fastdfs 图片上传
 #http://39.108.13.196:88/zxh/M00/00/00/rBIQClyQ7cOANZ11AAC517l7vus265_big.jpg
-#192.168.106.157:22122
+#192.168.106.157:22122 这个就是你们图片地址
 fdfs:
   so-timeout: 1501
   connect-timeout: 2000
