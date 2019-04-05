@@ -5,18 +5,40 @@ Page({
    */
   data: {
     userInfo: null,
-    isHidden: true, //判断编辑跟完成是否隐藏
+    isEdit: false, //判断编辑是编辑
     amount: 0, //总价
-    checkAll: true, // 下单中的全选和选不选
+    checkAll: null, // 下单中的全选和选不选
     shopList: [], //商品列表
     shopCarInfo: {}, //购物车信息
     buyNumMin: 1, //购买最小数量
     buyNumMax: 99, //购买最大数量
-    editActive: [], // 编辑状态是否激活，激活就是要删除
-    checkAllEdit: false, //编辑是否全选
+    delCheckAll: null, //编辑是否全选
     imgUrl: app.imgUrl
   },
-  toPay: function () {
+  /**
+   * 生命周期函数--监听页面显示
+   */
+  onShow: function() {
+    // 获取购物车数据
+    const shopCarInfo = wx.getStorageSync('shopCarInfo')
+    const userInfo = app.getGlobalUserInfo()
+    if (shopCarInfo && shopCarInfo.shopList.length) {
+      const shopList = shopCarInfo.shopList
+      const checkAll = this.isCheckAll(shopList)
+      const delCheckAll = this.isDelCheckAll(shopList)
+
+      this.setData({
+        shopList,
+        shopCarInfo,
+        userInfo,
+        checkAll,
+        delCheckAll
+      })
+      this.getAmount()
+    }
+  },
+  /**跳转到支付页面 */
+  toPay() {
     if (!this.data.userInfo) {
       wx.showToast({
         title: '请先登录，再下订单',
@@ -47,21 +69,19 @@ Page({
     })
   },
   /**跳转到首页 */
-  toIndexPage: function () {
+  toIndexPage() {
     wx.switchTab({
       url: "/pages/main/main"
     });
   },
-  /** 切换状态 */
-  toggleHidden: function (e) {
+  /** 切换编辑页面跟下单页面 */
+  toggleHidden() {
     this.setData({
-      isHidden: !this.data.isHidden,
-      editActive: [],
-      checkAllEdit: false
+      isEdit: !this.data.isEdit,
     })
   },
   /** 下单的 全选 和全不选 */
-  select: function (e) {
+  select() {
     var checkAll = this.data.checkAll;
     checkAll = !checkAll
     var shopList = this.data.shopList
@@ -74,23 +94,50 @@ Page({
     })
     this.getAmount()
   },
-  selectItem: function (e) {
+  //判断全选按钮为true还是false
+  isCheckAll(shopList) {
+    for (const index in shopList) {
+      if (!shopList[index].active) {
+        return false;
+      }
+    }
+    return true;
+  },
+  //判断删除全选按钮
+  isDelCheckAll(shopList) {
+    for (const index in shopList) {
+      if (!shopList[index].delActive) {
+        return false;
+      }
+    }
+    return true;
+  },
+  //商品选择状态 （下单的选择和删除的选择）
+  selectItem(e) {
     const shopCarInfo = this.data.shopCarInfo
     const shopList = this.data.shopList //获取购物车列表
-    const index = e.currentTarget.dataset.index; //获取当前点击事件的下标索引
-    //取反
-    console.log(shopList[index].active)
-    shopList[index].active = !shopList[index].active;
-    shopCarInfo.shopList = shopList
+    const index = e.currentTarget.dataset.index //获取当前点击事件的下标索引
+    const isEdit = this.data.isEdit // 判断是编辑还是完成  false是编辑页面（删除），true是完成（下单）
+    if (isEdit) {
+      // 是编辑 商品删除取反
+      shopList[index].delActive = !shopList[index].delActive;
+      const delCheckAll = this.isDelCheckAll(shopList)
+      this.setData({delCheckAll})
+    } else {
+      // 是下单 商品购买选择取反
+      shopList[index].active = !shopList[index].active;
+      const checkAll = this.isCheckAll(shopList)
+      this.setData({ checkAll })
+      this.getAmount()
+    }
+    // this.setData() 这个主要是用来告诉页面要重新渲染
     this.setData({
-      shopCarInfo: shopCarInfo,
-      shopList: shopList
+      shopList
     })
-    this.getAmount()
     wx.setStorageSync("shopCarInfo", shopCarInfo)
   },
   /** 计算总价格 */
-  getAmount: function () {
+  getAmount() {
     let shopList = this.data.shopList; // 获取购物车列表
     let amount = 0;
     for (let i = 0; i < shopList.length; i++) { // 循环列表得到每个数据
@@ -104,7 +151,7 @@ Page({
   },
 
   /** 商品增加 */
-  add: function (e) {
+  add(e) {
     const shopCarInfo = this.data.shopCarInfo // 获取购物车信息
     const shopList = this.data.shopList //获取购物车列表
     const index = e.currentTarget.dataset.index //获取当前点击事件的下标索引
@@ -122,7 +169,7 @@ Page({
   },
 
   /** 商品减少 */
-  reduce: function (e) {
+  reduce(e) {
     const shopCarInfo = this.data.shopCarInfo // 获取购物车信息
     const shopList = this.data.shopList //获取购物车列表
     const index = e.currentTarget.dataset.index //获取当前点击事件的下标索引
@@ -144,18 +191,20 @@ Page({
   },
 
   /** 删除商品信息 */
-  del: function (e) {
-    let shopList = this.data.shopList // 获取购物车列表
+  del() {
+    let shopList = JSON.parse(JSON.stringify(this.data.shopList)) // 获取购物车列表
     let shopCarInfo = this.data.shopCarInfo // 获取购物车信息
-    let editActive = this.data.editActive // 获取编辑的激活状态
     const length = shopList.length
-    for (let index = 0; index < length; index++) {
-      // 理论依据：判断中 undefined 为 false
-      if (editActive[index]) {
-        shopCarInfo.shopNum = shopCarInfo.shopNum - shopList[index].bookQuantity
-        shopList.splice(index, 1)
+    console.log("前：", shopList)
+    shopList = shopList.filter(res => {
+      if(res.delActive){
+        shopCarInfo.shopNum -= res.bookQuantity
+        return false
+      } else {
+        return true
       }
-    }
+    })
+    console.log("后：",shopList)
     shopCarInfo.shopList = shopList
     this.setData({
       shopCarInfo: shopCarInfo,
@@ -163,45 +212,5 @@ Page({
     })
     this.getAmount()
     wx.setStorageSync("shopCarInfo", shopCarInfo)
-  },
-  /** 商品选择 */
-  editSelect: function (e) {
-    const index = e.currentTarget.dataset.index
-    let editActive = this.data.editActive
-    editActive[index] = !editActive[index];
-    this.setData({
-      editActive: editActive
-    })
-  },
-  /** 编辑商品的全选和全不选 */
-  editSelectAll: function (e) {
-    const editActive = this.data.editActive
-    const length = this.data.shopList.length
-    let checkAllEdit = this.data.checkAllEdit
-    checkAllEdit = !checkAllEdit
-    for (let index = 0; index < length; index++) {
-      editActive[index] = checkAllEdit
-    }
-    this.setData({
-      editActive: editActive,
-      checkAllEdit: checkAllEdit
-    })
-  },
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-    // 获取购物车数据
-    const shopCarInfo = wx.getStorageSync('shopCarInfo');
-    const userInfo = app.getGlobalUserInfo()
-    if (shopCarInfo && shopCarInfo.shopList) {
-      const shopList = shopCarInfo.shopList
-      this.setData({
-        shopList: shopList,
-        shopCarInfo: shopCarInfo,
-        userInfo: userInfo
-      })
-      this.getAmount()
-    }
   }
 })

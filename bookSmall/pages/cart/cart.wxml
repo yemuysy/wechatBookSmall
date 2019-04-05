@@ -10,8 +10,10 @@
   </bolck>
   <block wx:else>
     <view class="top-list">
-      <view class="edit-btn" hidden="{{!isHidden}}" bindtap="toggleHidden">编辑</view>
-      <view class="edit-btn" hidden="{{isHidden}}" bindtap="toggleHidden">完成</view>
+      <!-- 不是编辑就隐藏-->
+      <view class="edit-btn" hidden="{{!isEdit}}" bindtap="toggleHidden">完成</view>
+      <!-- 是编辑就要不隐藏  -->
+      <view class="edit-btn" hidden="{{isEdit}}" bindtap="toggleHidden">编辑</view>
     </view>
     <view class='goods-list'>
       <!-- wx:for 渲染购物车列表 -->
@@ -19,13 +21,15 @@
         <view class='goods'>
           <view class='goods-icon'>
             <!-- wx:if 是否选择显示不同图标 -->
-            <block wx:if="{{isHidden}}">
-              <icon wx:if="{{item.active}}" type="success" bindtap="selectItem" data-index="{{index}}" />
+            <block wx:if="{{isEdit}}">
+              <!-- 编辑 -->
+              <icon wx:if="{{item.delActive}}" type="success" color='red' bindtap="selectItem" data-index="{{index}}" />
               <icon wx:else type="circle" bindtap="selectItem" data-index="{{index}}" />
             </block>
             <block wx:else>
-              <icon wx:if="{{editActive[index]}}" type="success" color='red' bindtap="editSelect" data-index="{{index}}" />
-              <icon wx:else type="circle" bindtap="editSelect" data-index="{{index}}" />
+              <!-- 下单 -->
+              <icon wx:if="{{item.active}}" type="success" bindtap="selectItem" data-index="{{index}}" />
+              <icon wx:else type="circle" bindtap="selectItem" data-index="{{index}}" />
             </block>
           </view>
           <!-- 点击商品图片可跳转到商品详情 -->
@@ -37,10 +41,12 @@
             <view style='color: red'>￥{{item.bookPrice}}</view>
             <!-- 增加减少数量按钮 -->
             <view class='num-box'>
+              <!-- 判断当前购买数量是否等于最低购买数量 是就变灰色，禁用 -->
               <view class="num-jian {{item.bookQuantity == buyNumMin ? 'hui': ''}}" bindtap="reduce" data-index="{{index}}">-</view>
               <view class="num-input">
                 <input type="number" value="{{item.bookQuantity}}" disabled/>
               </view>
+              <!-- 判断当前购买数量是否等于最大购买数量 是就变灰色，禁用 -->
               <view class="num-jia {{item.bookQuantity == buyNumMax ? 'hui': ''}}" bindtap="add" data-index="{{index}}">+</view>
             </view>
           </view>
@@ -51,23 +57,23 @@
 
     <!-- 底部操作栏 -->
     <view class="cart-bottom">
-
-      <block wx:if="{{isHidden}}">
+      <!-- 这里有两部分，一部分是下单的选择框，一部分是编辑的选择框 -->
+      <block wx:if="{{isEdit}}">
+        <icon wx:if="{{delCheckAll}}" class="cart-icon" type="success" color='red' size="20" bindtap="editSelectAll" data-index="{{index}}" />
+        <icon wx:else type="circle" class="cart-icon" size="20" bindtap="editSelectAll" data-index="{{index}}" />
+      </block>
+      <block wx:else>
         <icon wx:if="{{checkAll}}" class="cart-icon" type="success" size="20" bindtap="select" data-index="{{index}}" />
         <icon wx:else type="circle" class="cart-icon" size="20" bindtap="select" data-index="{{index}}" />
       </block>
-      <block wx:else>
-        <icon wx:if="{{checkAllEdit}}" class="cart-icon" type="success" color='red' size="20" bindtap="editSelectAll" data-index="{{index}}" />
-        <icon wx:else type="circle" class="cart-icon" size="20" bindtap="editSelectAll" data-index="{{index}}" />
-      </block>
-
       <label class='checkAll'>全选</label>
       <view class='cart-pay'>
-        <view hidden='{{!isHidden}}' class='cart_pay' bindtap="toPay">下单</view>
-        <view hidden="{{isHidden}}" class='cart_edit' bindtap="del">删除</view>
+        <!-- 是编辑部显示删除按钮 -->
+        <view hidden="{{!isEdit}}" class='cart_edit' bindtap="del">删除</view>
+        <!-- 不是编辑就显示下单页面 -->
+        <view hidden='{{isEdit}}' class="cart_pay {{amount == 0 ? 'disabledTap':''}}" bindtap="toPay">下单</view>
       </view>
-
-      <view hidden='{{!isHidden}}' class='cart-sum'>
+      <view hidden='{{isEdit}}' class='cart-sum'>
         <text class='cart_sum'>
           <text class='sum_text'>合计：</text>
         <text class='sum_color'>￥{{amount}}元</text>

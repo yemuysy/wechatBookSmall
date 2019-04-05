@@ -36,7 +36,7 @@ Page({
     // encodeURIComponent 转移字符串 主要是 书本描述
     item = encodeURIComponent(item)
     wx.navigateTo({
-      url: "/pages/main/goods/goods?item=" + item
+      url: "/pages/goods/goods?item=" + item
     })
   },
 

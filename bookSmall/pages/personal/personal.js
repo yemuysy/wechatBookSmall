@@ -116,7 +116,7 @@ Page({
       return
     }
     wx.navigateTo({
-      url: '../personal/userInfo/userInfo'
+      url: '/pages/userInfo/userInfo'
     })
   },
   goOrder() {

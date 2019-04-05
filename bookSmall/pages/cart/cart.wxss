@@ -62,6 +62,10 @@ page {
   color: #999;
   height: 100%;
 }
+.disabledTap {
+background: #999;
+pointer-events: none;
+}
 
 .goods-icon {
   flex: 1;
