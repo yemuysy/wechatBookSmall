@@ -1,0 +1,82 @@
+<view class="container">
+  <!-- 图片展示，这里可以做成轮播图 -->
+  <view class='swiper-class'>
+    <swiper autoplay='true' interval='5000' duration='1000' style="height: 600rpx;width:{{width}}px">
+      <block wx:for="{{pic}}" wx:key="{{index}}">
+        <swiper-item>
+          <image class='auto-img' src='{{imgUrl}}{{item}}' lazy-load="true"></image>
+        </swiper-item>
+      </block>
+    </swiper>
+  </view>
+  <!-- 显示物品信息  -->
+  <view class="goods-info">
+    <!-- 价钱，书名 -->
+    <view>
+      <view class="goods-price">¥ {{book.price}}</view>
+      <view class="goods-title">{{book.name}}</view>
+    </view>
+    <!-- 作者，出版社 -->
+    <view>
+      <view class="goods-press">{{book.press}}</view>
+      <view class="goods-author">{{book.author}}</view>
+    </view>
+  </view>
+  <!-- 详情展示 -->
+  <view class="goods-des-info">
+    <view class="label-title">作品简介</view>
+    <view class="goods-text">
+      {{book.description}}
+    </view>
+  </view>
+  <!-- 底部菜单栏-->
+  <view class="footer-box">
+    <!-- 我的购物车  -->
+    <view class="shop-cart-btn" bindtap="goShopCar">
+      <!-- 购物车物品总数量 -->
+      <view class="shop-num">({{shopNum}})</view>
+      <view style='position:absolute;bottom:10rpx;'>我的购物车</view>
+    </view>
+    <view class="join-shop-cart" bindtap="toAddShopCar">加入购物车</view>
+  </view>
+  <!-- 模态框，显示购买物品的规格 霸占整个屏幕 -->
+  <view class="show-popup" hidden="{{hideShopPopup}}">
+    <!--打开模态框时显示，上半部分半透明 -->
+    <view class="popup-mask" bindtap="closePopupTap"></view>
+    <!-- 模态框主要内容  -->
+    <view class="popup-contents">
+      <!-- 商品个别信息，小图片和商品名，价格 -->
+      <view class="pop-goods-info">
+        <view class="pop-img-box">
+          <!-- 这里必须要判断下 book.icon 是否存在 因为再一开始渲染时，会先渲染 imgUrl（实际存在的data对象里面的属性） -->
+          <block wx:if="{{book.icon}}">
+            <image src='{{imgUrl}}{{book.icon}}' class="goods-thumbnail" lazy-load="true" />
+          </block>
+        </view>
+        <view class="pop-goods-des">
+          <view class="pop-goods-title">{{book.name}}</view>
+          <view class="pop-goods-price">¥ {{book.price}}</view>
+        </view>
+        <!-- 关闭模态框-->
+        <view class="pop-goods-close" bindtap="closePopupTap"></view>
+      </view>
+      <!-- 购买框 -->
+      <view class="buy-num-box">
+        <view class="num-label">购买数量</view>
+        <view class="num-box">
+          <!--减少-->
+          <view class="num-jian {{buyNumber == buyNumMin ? 'hui': ''}}" bindtap="add">-</view>
+          <!-- 购买数量 -->
+          <view class="num-input">
+            <input type="number" value="{{buyNumber}}" disabled/>
+          </view>
+          <!-- 增加 -->
+          <view class="num-jia {{buyNumber== buyNumMax ? 'hui': ''}}" bindtap="reduce">+</view>
+        </view>
+      </view>
+      <view class="popup-join-btn" bindtap="addShopCar">
+        加入购物车
+      </view>
+    </view>
+  </view>
+</view>
