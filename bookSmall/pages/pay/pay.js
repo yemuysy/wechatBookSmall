@@ -6,34 +6,42 @@ Page({
    * 页面的初始数据
    */
   data: {
+    showAddress: false,
     order: null, // 订单
     amount: null, //总价格
     orderUser: {}, // 购买用户信息
     imgUrl: null, // 图片路劲
     userInfo: null
   },
+  getAddress() {
+    console.log(1)
+    wx.chooseAddress({
+      success: res => {
+        if(res){
+          const orderUser = this.data.orderUser
+          orderUser.userName = res.userName
+          orderUser.userPhone = res.telNumber
+          orderUser.userAddress = res.provinceName + ' ' + res.cityName + ' ' + res.countyName + ' ' + res.detailInfo
+          console.log(orderUser)
+          this.setData({
+            showAddress: true,
+            orderUser
+          })
+        }
+      }
+    })
+  },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    // console.log(JSON.parse(options.order))
     const order = JSON.parse(options.order)
     const imgUrl = app.imgUrl
-    console.log(options.order)
 
     const userInfo = app.getGlobalUserInfo()
-    console.log(userInfo)
-    const orderUser = {}
-    if (userInfo) {
-      orderUser.userName = userInfo.nickName
-      orderUser.userPhone = userInfo.phone
-      orderUser.userAddress = userInfo.address
-      orderUser.userOpenid = userInfo.openid
-    }
     this.setData({
       order: order,
       amount: order.amount,
-      orderUser: orderUser,
       imgUrl: imgUrl,
       userInfo: userInfo
     })
@@ -42,6 +50,15 @@ Page({
   /** 生成订单消息 */
   createOrder(e) {
     const orderUser = this.data.orderUser
+    if (JSON.stringify(orderUser) === '{}'){
+      wx.showToast({
+        title: '请先添加收货地址',
+        icon: 'none'
+      })
+      return 
+    }
+    const userInfo = this.data.userInfo
+    orderUser.userOpenid = userInfo.openid
     const order = this.data.order
     orderUser.amount = this.data.amount
     const pay = {}
@@ -54,8 +71,8 @@ Page({
       method: "POST",
       header: {
         'content-type': 'application/json', // 默认值
-        'userId': this.data.userInfo.id, // 用户id
-        "userToken": this.data.userInfo.userToken // 用户 token
+        'userId': userInfo.id, // 用户id
+        "userToken": userInfo.userToken // 用户 token
       },
       data: pay,
       success: e => {

@@ -1,20 +1,22 @@
 <!--pages/pay/pay.wxml-->
 <view class='container'>
   <view class='address'>
-    <view class='item'>
-      <text style='color:red;'>*</text>
-      <label for='nickName'>收货人： </label>
-      <input id="nickName" bindblur='inputChange' data-name="userName" value='{{orderUser.userName}}' placeholder="请输入" placeholder-style="color:#e2e2e2;" auto-focus></input>
+    <view class='itembox' wx:if="{{showAddress}}" bindtap='getAddress'>
+      <view class='info'>
+        <view class='header'>
+          <text class='username'>{{orderUser.userName}}</text>
+          <text class='phone'>{{orderUser.userPhone}}</text>
+        </view>
+        <view class="middle">
+          <text>{{orderUser.userAddress}}</text>
+        </view>
+      </view>
+      <view class='img'>
+        <image class='user_row_right' src='/static/images/goright.png'></image>
+      </view>
     </view>
-    <view class='item'>
-      <text style='color:red;'>*</text>
-      <label for='phone'>收货手机：</label>
-      <input id='phone' bindblur='inputChange' data-name="userPhone" placeholder="请输入" placeholder-style="color:#e2e2e2;" value='{{orderUser.userPhone}}' required></input>
-    </view>
-    <view class='item'>
-      <text style='color:red;'>*</text>
-      <label for='address'>收货地址：</label>
-      <input id='address' bindblur='inputChange' data-name="userAddress" placeholder="请输入" placeholder-style="color:#e2e2e2;" value='{{orderUser.userAddress}}'></input>
+    <view class='btnBox' wx:else>
+      <button bindtap='getAddress'>＋添加地址</button>
     </view>
   </view>
   <view class='title'>购物清单:</view>

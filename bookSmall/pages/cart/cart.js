@@ -35,6 +35,11 @@ Page({
         delCheckAll
       })
       this.getAmount()
+    } else {
+      this.setData({
+        shopList: [],
+        shopCarInfo: {}
+      })
     }
   },
   /**跳转到支付页面 */
@@ -122,12 +127,16 @@ Page({
       // 是编辑 商品删除取反
       shopList[index].delActive = !shopList[index].delActive;
       const delCheckAll = this.isDelCheckAll(shopList)
-      this.setData({delCheckAll})
+      this.setData({
+        delCheckAll
+      })
     } else {
       // 是下单 商品购买选择取反
       shopList[index].active = !shopList[index].active;
       const checkAll = this.isCheckAll(shopList)
-      this.setData({ checkAll })
+      this.setData({
+        checkAll
+      })
       this.getAmount()
     }
     // this.setData() 这个主要是用来告诉页面要重新渲染
@@ -197,14 +206,14 @@ Page({
     const length = shopList.length
     console.log("前：", shopList)
     shopList = shopList.filter(res => {
-      if(res.delActive){
+      if (res.delActive) {
         shopCarInfo.shopNum -= res.bookQuantity
         return false
       } else {
         return true
       }
     })
-    console.log("后：",shopList)
+    console.log("后：", shopList)
     shopCarInfo.shopList = shopList
     this.setData({
       shopCarInfo: shopCarInfo,

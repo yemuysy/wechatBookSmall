@@ -7,18 +7,47 @@
 
 .address {
   width: 100%;
+  height: 240rpx;
+  padding: 20rpx;
+  /* background:#000; */
 }
 
-.item {
-  align-items: center;
-  height: 70rpx;
-  margin: 20rpx;
+.itembox{
   display: flex;
+  background: white;
+  height: 200rpx;
+  padding: 20rpx;
+  align-items: center;
   border-radius: 20rpx;
 }
 
-.item label {
-  width: 160rpx;
+.btnBox{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20rpx;
+  height: 200rpx;
+  background: white;
+  border-radius: 20rpx;
+}
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  margin-bottom: 20rpx;
+}
+.username {
+  font-size: 34rpx;
+  margin-right: 15rpx;
+}
+.phone {
+  color: #999;
+}
+
+.user_row_right {
+  /* border: 1px solid #757575; */
+  height: 40rpx;
+  width: 40rpx;
 }
 
 input {

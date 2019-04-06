@@ -131,5 +131,11 @@ Page({
     wx.navigateTo({
       url: '../order/order'
     })
+  },
+  goAddress() {
+    wx.chooseAddress({
+      success: res => {
+      }
+    })
   }
 })
