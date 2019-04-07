@@ -7,14 +7,14 @@ Page({
    */
   data: {
     showAddress: false,
-    order: null, // 订单
+    itemList: null, // 订单列表
     amount: null, //总价格
     orderUser: {}, // 购买用户信息
     imgUrl: null, // 图片路劲
     userInfo: null
   },
+  /** 获取用户收货地址 */
   getAddress() {
-    console.log(1)
     wx.chooseAddress({
       success: res => {
         if(res){
@@ -35,15 +35,15 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    const order = JSON.parse(options.order)
+    const {itemList, amount} = JSON.parse(options.order)
     const imgUrl = app.imgUrl
 
     const userInfo = app.getGlobalUserInfo()
     this.setData({
-      order: order,
-      amount: order.amount,
-      imgUrl: imgUrl,
-      userInfo: userInfo
+      itemList,
+      amount,
+      imgUrl,
+      userInfo
     })
   },
 
@@ -59,11 +59,10 @@ Page({
     }
     const userInfo = this.data.userInfo
     orderUser.userOpenid = userInfo.openid
-    const order = this.data.order
     orderUser.amount = this.data.amount
     const pay = {}
     pay.orderMaster = orderUser
-    pay.orderDetailList = order.itemList
+    pay.orderDetailList = this.data.itemList
     console.log(pay)
 
     wx.request({
@@ -80,8 +79,9 @@ Page({
           // 清除购物车对应的东西
           const shopCarInfo = wx.getStorageSync('shopCarInfo')
           let shopList = shopCarInfo.shopList
-          const itemList = order.itemList
+          const itemList = this.data.itemList
           let shopNum = shopCarInfo.shopNum
+          // 移除对应购物车数据
           itemList.forEach(res => {
             shopList.splice(shopList.findIndex(e => {
               if (res.bookId === e.bookId) {

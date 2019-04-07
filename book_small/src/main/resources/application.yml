@@ -6,7 +6,8 @@ spring:
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/booksmall?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true
     username: root
-    password: root
+#    password: root
+    password: MYSQLzxh123456...
     #mysql新版驱动
     driver-class-name: com.mysql.cj.jdbc.Driver
 
@@ -42,7 +43,8 @@ spring:
 #    host: 192.168.106.157
     host: 127.0.0.1
     port: 6379
-    password:
+    password: 123456
+#    password:
     jedis:
       pool:
         # 连接池最大连接数（使用负值表示没有限制）
@@ -54,6 +56,7 @@ spring:
         #连接池中的最小空闲链接
         min-idle: 0
     timeout: 10000
+
 
   # 设置上传文件大小
   servlet:

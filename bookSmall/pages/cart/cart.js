@@ -18,21 +18,22 @@ Page({
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function() {
-    // 获取购物车数据
-    const shopCarInfo = wx.getStorageSync('shopCarInfo')
-    const userInfo = app.getGlobalUserInfo()
+  onShow: function () {
+    const shopCarInfo = wx.getStorageSync('shopCarInfo') // 获取购物车数据
+    const userInfo = app.getGlobalUserInfo() // 获取用户数据
     if (shopCarInfo && shopCarInfo.shopList.length) {
       const shopList = shopCarInfo.shopList
-      const checkAll = this.isCheckAll(shopList)
-      const delCheckAll = this.isDelCheckAll(shopList)
-
+      const isEdit = true
+      //isCheckAll： 0(false)代表下单全部选择的状态 1(true)代表删除全部选中的状态
+      const checkAll = this.isCheckAll(shopList, !isEdit)
+      const delCheckAll = this.isCheckAll(shopList, isEdit)
       this.setData({
         shopList,
         shopCarInfo,
         userInfo,
         checkAll,
-        delCheckAll
+        delCheckAll,
+        isEdit: !isEdit //让每次打开购物车都是下单页面 isEdit=false
       })
       this.getAmount()
     } else {
@@ -52,17 +53,18 @@ Page({
       return
     }
     const shopList = this.data.shopList
+    // 页面跳转传递的数据
     const order = {
       itemList: [],
       amount: this.data.amount
     }
+    // 遍历商品信息，选中的加入order集合
     shopList.forEach(res => {
       if (res.active) {
-        let item = []
-        item.book
         order.itemList.push(res)
       }
     })
+    // 判断是否选中了商品，虽然是做了禁用，但还是最好判断一下
     if (order.itemList.length === 0) {
       wx.showToast({
         title: '请选择商品',
@@ -85,33 +87,37 @@ Page({
       isEdit: !this.data.isEdit,
     })
   },
-  /** 下单的 全选 和全不选 */
-  select() {
-    var checkAll = this.data.checkAll;
-    checkAll = !checkAll
-    var shopList = this.data.shopList
-    for (var i = 0; i < shopList.length; i++) {
-      shopList[i].active = checkAll
+  /** 全选 和全不选 */
+  selectAll() {
+    const isEdit = this.data.isEdit
+    const act = isEdit ? 'delActive' : 'active' // 判断要哪个激活状态
+    const all = isEdit ? 'delCheckAll' : 'checkAll' // 判断要哪个全选状态
+    const check = !this.data[all] // 获取当前全选状态 并取反
+    const shopList = this.data.shopList
+    const shopCarInfo = this.data.shopCarInfo
+    // 遍历购物车激活状态信息并赋值全选状态
+    for (let i = 0; i < shopList.length; i++) {
+      shopList[i][act] = check
     }
+    shopCarInfo.shopList = shopList
     this.setData({
-      shopList: shopList,
-      checkAll: checkAll
+      shopList,
+      shopCarInfo,
+      [all]: check
     })
-    this.getAmount()
-  },
-  //判断全选按钮为true还是false
-  isCheckAll(shopList) {
-    for (const index in shopList) {
-      if (!shopList[index].active) {
-        return false;
-      }
+    // 判断需不需要重新计算价格
+    if (!isEdit) {
+      this.getAmount()
     }
-    return true;
+    wx.setStorageSync("shopCarInfo", shopCarInfo)
   },
-  //判断删除全选按钮
-  isDelCheckAll(shopList) {
+  //判断全选按钮为true还是false   check 0(false)=>active, 1(true)=>delActive
+  // 接收 check 而不直接使用 this.data.isEdit 是因为如果同时需要判断两个状态时，就会有问题
+  isCheckAll(shopList, check) {
+    const act = check ? 'delActive' : 'active'
     for (const index in shopList) {
-      if (!shopList[index].delActive) {
+      // 判断是否有属性是false,是的话就直接返回全选false
+      if (!shopList[index][act]) {
         return false;
       }
     }
@@ -122,27 +128,22 @@ Page({
     const shopCarInfo = this.data.shopCarInfo
     const shopList = this.data.shopList //获取购物车列表
     const index = e.currentTarget.dataset.index //获取当前点击事件的下标索引
-    const isEdit = this.data.isEdit // 判断是编辑还是完成  false是编辑页面（删除），true是完成（下单）
-    if (isEdit) {
-      // 是编辑 商品删除取反
-      shopList[index].delActive = !shopList[index].delActive;
-      const delCheckAll = this.isDelCheckAll(shopList)
-      this.setData({
-        delCheckAll
-      })
-    } else {
-      // 是下单 商品购买选择取反
-      shopList[index].active = !shopList[index].active;
-      const checkAll = this.isCheckAll(shopList)
-      this.setData({
-        checkAll
-      })
+    const isEdit = this.data.isEdit // 判断是编辑还是完成  true是编辑页面（删除)false是完成（下单）
+    const act = isEdit ? 'delActive' : 'active'
+    const all = isEdit ? 'delCheckAll' : 'checkAll'
+    // 商品对应状态取反
+    shopList[index][act] = !shopList[index][act]
+    const check = this.isCheckAll(shopList, isEdit)
+    shopCarInfo.shopList = shopList
+    this.setData({
+      shopCarInfo,
+      shopList,
+      [all]: check
+    })
+    //判断需不需要重新计算价格
+    if (!isEdit) {
       this.getAmount()
     }
-    // this.setData() 这个主要是用来告诉页面要重新渲染
-    this.setData({
-      shopList
-    })
     wx.setStorageSync("shopCarInfo", shopCarInfo)
   },
   /** 计算总价格 */
@@ -164,15 +165,14 @@ Page({
     const shopCarInfo = this.data.shopCarInfo // 获取购物车信息
     const shopList = this.data.shopList //获取购物车列表
     const index = e.currentTarget.dataset.index //获取当前点击事件的下标索引
-    let bookQuantity = shopList[index].bookQuantity //获取购物车里面的value值
-    bookQuantity = bookQuantity + 1
-    shopList[index].bookQuantity = bookQuantity
-    shopCarInfo.shopNum = shopCarInfo.shopNum + 1
+    // 购买数量和购物车总数量加1
+    shopList[index].bookQuantity++
+    shopCarInfo.shopNum++
     shopCarInfo.shopList = shopList
     this.setData({
-      shopList: shopList,
-      shopCarInfo: shopCarInfo
-    });
+      shopList,
+      shopCarInfo
+    })
     this.getAmount()
     wx.setStorageSync("shopCarInfo", shopCarInfo) //存缓存
   },
@@ -182,29 +182,24 @@ Page({
     const shopCarInfo = this.data.shopCarInfo // 获取购物车信息
     const shopList = this.data.shopList //获取购物车列表
     const index = e.currentTarget.dataset.index //获取当前点击事件的下标索引
-    let bookQuantity = shopList[index].bookQuantity // 获取当前数量
-    if (bookQuantity == 1) {
-      shopList[index].bookQuantity = 1
-    } else {
-      bookQuantity--
-      shopList[index].bookQuantity = bookQuantity;
+    // 当前数量-1
+    if (shopList[index].bookQuantity !== 1) {
+      shopList[index].bookQuantity--
+      shopCarInfo.shopNum--
     }
-    shopCarInfo.shopNum = shopCarInfo.shopNum - 1
     shopCarInfo.shopList = shopList
     this.setData({
-      shopCarInfo: shopCarInfo,
-      shopList: shopList
-    });
+      shopCarInfo,
+      shopList
+    })
     this.getAmount()
     wx.setStorageSync("shopCarInfo", shopCarInfo)
   },
 
   /** 删除商品信息 */
   del() {
-    let shopList = JSON.parse(JSON.stringify(this.data.shopList)) // 获取购物车列表
+    let shopList = this.data.shopList // 获取购物车列表
     let shopCarInfo = this.data.shopCarInfo // 获取购物车信息
-    const length = shopList.length
-    console.log("前：", shopList)
     shopList = shopList.filter(res => {
       if (res.delActive) {
         shopCarInfo.shopNum -= res.bookQuantity
@@ -213,11 +208,10 @@ Page({
         return true
       }
     })
-    console.log("后：", shopList)
     shopCarInfo.shopList = shopList
     this.setData({
-      shopCarInfo: shopCarInfo,
-      shopList: shopList
+      shopCarInfo,
+      shopList
     })
     this.getAmount()
     wx.setStorageSync("shopCarInfo", shopCarInfo)

@@ -10,27 +10,16 @@
   </bolck>
   <block wx:else>
     <view class="top-list">
-      <!-- 不是编辑就隐藏-->
-      <view class="edit-btn" hidden="{{!isEdit}}" bindtap="toggleHidden">完成</view>
-      <!-- 是编辑就要不隐藏  -->
-      <view class="edit-btn" hidden="{{isEdit}}" bindtap="toggleHidden">编辑</view>
+      <!-- 不是编辑就隐藏 isEdit 默认值是 false  这里要显示相反的文字-->
+      <view class="edit-btn" bindtap="toggleHidden">{{isEdit ? '完成': '编辑'}}</view>
     </view>
     <view class='goods-list'>
       <!-- wx:for 渲染购物车列表 -->
       <block wx:for="{{shopList}}" wx:key="{{index}}">
         <view class='goods'>
           <view class='goods-icon'>
-            <!-- wx:if 是否选择显示不同图标 -->
-            <block wx:if="{{isEdit}}">
-              <!-- 编辑 -->
-              <icon wx:if="{{item.delActive}}" type="success" color='red' bindtap="selectItem" data-index="{{index}}" />
-              <icon wx:else type="circle" bindtap="selectItem" data-index="{{index}}" />
-            </block>
-            <block wx:else>
-              <!-- 下单 -->
-              <icon wx:if="{{item.active}}" type="success" bindtap="selectItem" data-index="{{index}}" />
-              <icon wx:else type="circle" bindtap="selectItem" data-index="{{index}}" />
-            </block>
+            <!-- 选中栏，判断是编辑还是完成 -->
+            <icon type="{{isEdit ? (item.delActive ? 'success' : 'circle') : (item.active ? 'success' : 'circle')}}" color="{{isEdit ? 'red':''}}" bindtap="selectItem" data-index="{{index}}" />
           </view>
           <!-- 点击商品图片可跳转到商品详情 -->
           <view class='goods-img'>
@@ -58,14 +47,7 @@
     <!-- 底部操作栏 -->
     <view class="cart-bottom">
       <!-- 这里有两部分，一部分是下单的选择框，一部分是编辑的选择框 -->
-      <block wx:if="{{isEdit}}">
-        <icon wx:if="{{delCheckAll}}" class="cart-icon" type="success" color='red' size="20" bindtap="editSelectAll" data-index="{{index}}" />
-        <icon wx:else type="circle" class="cart-icon" size="20" bindtap="editSelectAll" data-index="{{index}}" />
-      </block>
-      <block wx:else>
-        <icon wx:if="{{checkAll}}" class="cart-icon" type="success" size="20" bindtap="select" data-index="{{index}}" />
-        <icon wx:else type="circle" class="cart-icon" size="20" bindtap="select" data-index="{{index}}" />
-      </block>
+      <icon type="{{isEdit ? (delCheckAll ? 'success' : 'circle'): (checkAll ? 'success' : 'circle')}}" color="{{isEdit ? 'red':''}}" class="cart-icon" bindtap="selectAll" />
       <label class='checkAll'>全选</label>
       <view class='cart-pay'>
         <!-- 是编辑部显示删除按钮 -->

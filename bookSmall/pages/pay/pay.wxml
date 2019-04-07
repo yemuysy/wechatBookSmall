@@ -23,7 +23,7 @@
   <!-- <view class='separate'></view> -->
   <view class='goods-list'>
     <!-- wx:for 渲染购物车列表 -->
-    <block wx:for="{{order.itemList}}" wx:key="{{index}}">
+    <block wx:for="{{itemList}}" wx:key="{{index}}">
       <view class='goods'>
         <!-- 点击商品图片可跳转到商品详情 -->
         <view class='goods-img'>
@@ -48,7 +48,7 @@
     <view class='cart-sum'>
       <text class='cart_sum'>
           <text class='sum_text'>合计：</text>
-      <text class='sum_color'>￥{{order.amount}}元</text>
+      <text class='sum_color'>￥{{amount}}元</text>
       </text>
     </view>
   </view>
