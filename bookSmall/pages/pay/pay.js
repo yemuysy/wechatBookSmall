@@ -80,17 +80,16 @@ Page({
           const shopCarInfo = wx.getStorageSync('shopCarInfo')
           let shopList = shopCarInfo.shopList
           const itemList = this.data.itemList
-          let shopNum = shopCarInfo.shopNum
           // 移除对应购物车数据
           itemList.forEach(res => {
             shopList.splice(shopList.findIndex(e => {
               if (res.bookId === e.bookId) {
-                shopNum = shopNum - res.bookQuantity
+                // 减掉购物车数量
+                shopCarInfo.shopNum -= res.bookQuantity
                 return true
               }
             }), 1)
           })
-          shopCarInfo.shopNum = shopNum
           wx.setStorageSync('shopCarInfo', shopCarInfo)
           wx.showToast({
             title: '支付成功',
@@ -112,16 +111,6 @@ Page({
           app.setGlobalUserInfo(null)
         }
       }
-    })
-  },
-  /** input 的值 */
-  inputChange(e) {
-    const name = e.currentTarget.dataset.name
-    const value = e.detail.value
-    const orderUser = this.data.orderUser
-    orderUser[name] = value
-    this.setData({
-      orderUser: orderUser
     })
   }
 })

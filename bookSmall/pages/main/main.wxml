@@ -14,7 +14,7 @@
     <scroll-view class="type-navbar" scroll-x="true">
       <block wx:for-items="{{categories}}" wx:key="id">
         <view class="type-box">
-          <view id="{{item.id}}" class="type-navbar-item {{activeCategoryId == item.id ? 'type-item-on' : ''}}" bindtap="tabClick">
+          <view data-id="{{item.id}}" class="type-navbar-item {{activeCategoryId == item.id ? 'type-item-on' : ''}}" bindtap="tabClick">
             {{item.name}}
           </view>
         </view>
@@ -24,7 +24,7 @@
   <!--商品展示-->
   <view class="goods-container">
     <block wx:for-items="{{books}}" wx:key="{{index}}">
-      <view class="goods-box" bindtap="toDetailsTap" data-item="{{item}}">
+      <view class="goods-box" bindtap="toDetailsTap" data-index="{{index}}">
         <view class="img-box">
           <image src="{{imgUrl}}{{item.icon}}" class="image" mode="aspectFill" lazy-load="true" />
         </view>

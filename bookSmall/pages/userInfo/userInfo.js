@@ -21,7 +21,7 @@ Page({
     })
   },
   // 点击按钮换手机相册或者电脑本地图片
-  changeFace: function() {
+  changeFace() {
     wx.chooseImage({
       count: 1, // 默认9 
       sizeType: ['compressed'], // original 原图 compressed 压缩图,可以指定是原图还是压缩图，默认二者都有 

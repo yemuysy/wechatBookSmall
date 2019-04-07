@@ -48,7 +48,7 @@
       <!-- 商品个别信息，小图片和商品名，价格 -->
       <view class="pop-goods-info">
         <view class="pop-img-box">
-          <!-- 这里必须要判断下 book.icon 是否存在 因为再一开始渲染时，会先渲染 imgUrl（实际存在的data对象里面的属性） -->
+          <!-- 这里必须要判断下 book.icon 是否存在 因为再一开始渲染时，会先渲染 imgUrl（实际存在的data对象里面的属性） 最好的做法就是在取出图片路径的时候就处理 -->
           <block wx:if="{{book.icon}}">
             <image src='{{imgUrl}}{{book.icon}}' class="goods-thumbnail" lazy-load="true" />
           </block>
@@ -65,13 +65,13 @@
         <view class="num-label">购买数量</view>
         <view class="num-box">
           <!--减少-->
-          <view class="num-jian {{buyNumber == buyNumMin ? 'hui': ''}}" bindtap="add">-</view>
+          <view class="num-jian {{buyNumber == buyNumMin ? 'hui': ''}}" bindtap="reduce">-</view>
           <!-- 购买数量 -->
           <view class="num-input">
             <input type="number" value="{{buyNumber}}" disabled/>
           </view>
           <!-- 增加 -->
-          <view class="num-jia {{buyNumber== buyNumMax ? 'hui': ''}}" bindtap="reduce">+</view>
+          <view class="num-jia {{buyNumber== buyNumMax ? 'hui': ''}}" bindtap="add">+</view>
         </view>
       </view>
       <view class="popup-join-btn" bindtap="addShopCar">

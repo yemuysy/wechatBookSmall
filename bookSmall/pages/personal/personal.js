@@ -68,7 +68,7 @@ Page({
                   data: {
                     encryptedData: e.encryptedData,
                     iv: e.iv,
-                    code: code
+                    code
                   },
                   fail: res => {
                     wx.hideLoading({

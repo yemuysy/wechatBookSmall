@@ -1,20 +1,16 @@
 <!--pages/pay/pay.wxml-->
 <view class='container'>
   <view class='address'>
-    <view class='item'>
-      <text style='color:red;'>*</text>
-      <label for='nickName'>收货人： </label>
-      <input id="nickName" value='{{orderMaster.userName}}' disabled='{{true}}'></input>
-    </view>
-    <view class='item'>
-      <text style='color:red;'>*</text>
-      <label for='phone'>收货手机：</label>
-      <input id="phone" value='{{orderMaster.userPhone}}' disabled='{{true}}'></input>
-    </view>
-    <view class='item'>
-      <text style='color:red;'>*</text>
-      <label for='address'>收货地址：</label>
-      <input id='address' value='{{orderMaster.userAddress}}' disabled='{{true}}'></input>
+    <view class='itembox'>
+      <view class='info'>
+        <view class='header'>
+          <text class='username'>{{orderMaster.userName}}</text>
+          <text class='phone'>{{orderMaster.userPhone}}</text>
+        </view>
+        <view class="middle">
+          <text>{{orderMaster.userAddress}}</text>
+        </view>
+      </view>
     </view>
   </view>
   <view class='title'>购物清单:</view>
