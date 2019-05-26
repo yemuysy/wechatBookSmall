@@ -45,7 +45,7 @@ public class AdminController {
         if (StringUtils.isBlank(admin.getName()) || StringUtils.isBlank(admin.getPassword())) {
             return ApiJSONResult.errorMsg("账号和密码不能为空");
         }
-
+        System.out.println();
         Admin adminResult = basicController.adminService.login(admin.getName(), MD5Util.getMD5Str(admin.getPassword()));
 
         if (null == adminResult) {
